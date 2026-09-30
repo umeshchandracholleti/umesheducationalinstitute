@@ -1,4 +1,5 @@
 const contactEmail = "umeshcholleti2219@gmail.com";
+const apiBaseUrl = (window.UmeshInstituteConfig && window.UmeshInstituteConfig.apiBaseUrl) || "http://localhost:3000";
 
 const menuButton = document.querySelector(".menu-toggle");
 const siteNav = document.querySelector(".site-nav");
@@ -26,10 +27,41 @@ contactForm?.addEventListener("submit", (event) => {
   if (!contactForm.reportValidity()) return;
 
   const data = new FormData(contactForm);
-  const subject = `Learning inquiry from ${data.get("name")}`;
-  const body = `Name: ${data.get("name")}\nEmail: ${data.get("email")}\n\n${data.get("message")}`;
-  window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  formNote.textContent = "Your email app is opening with your inquiry ready to send.";
+  const payload = {
+    name: data.get("name")?.toString().trim(),
+    email: data.get("email")?.toString().trim(),
+    phone: data.get("phone")?.toString().trim() || "",
+    message: data.get("message")?.toString().trim(),
+  };
+
+  const fallbackToEmail = () => {
+    const subject = `Learning inquiry from ${payload.name}`;
+    const body = `Name: ${payload.name}\nEmail: ${payload.email}\nPhone: ${payload.phone || "Not provided"}\n\n${payload.message}`;
+    window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    formNote.textContent = "Your email app is opening with your inquiry ready to send.";
+  };
+
+  formNote.textContent = "Sending your inquiry...";
+
+  fetch(`${apiBaseUrl}/api/users`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  })
+    .then(async (response) => {
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.message || "Unable to save your inquiry.");
+      }
+
+      formNote.textContent = "Your inquiry has been saved successfully. We will contact you soon.";
+      contactForm.reset();
+    })
+    .catch((error) => {
+      console.error("Database submit failed, falling back to email:", error);
+      fallbackToEmail();
+    });
 });
 
 document.querySelector("#year").textContent = new Date().getFullYear();
