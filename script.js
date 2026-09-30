@@ -1,5 +1,4 @@
-// Set this to the admissions email address before publishing the site.
-const contactEmail = "YOUR_EMAIL_ADDRESS";
+const contactEmail = "umeshcholleti2219@gmail.com";
 
 const menuButton = document.querySelector(".menu-toggle");
 const siteNav = document.querySelector(".site-nav");
@@ -25,11 +24,6 @@ const formNote = document.querySelector("#form-note");
 contactForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   if (!contactForm.reportValidity()) return;
-
-  if (contactEmail === "YOUR_EMAIL_ADDRESS") {
-    formNote.textContent = "Please set the admissions email in script.js before publishing this contact form.";
-    return;
-  }
 
   const data = new FormData(contactForm);
   const subject = `Learning inquiry from ${data.get("name")}`;

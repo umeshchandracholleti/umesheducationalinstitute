@@ -1,6 +1,6 @@
 # Umesh Educational Institute
 
-A responsive, static landing page for Umesh Educational Institute. It uses plain HTML, CSS, JavaScript, and a custom SVG logo, so it can be hosted directly with GitHub Pages without a build step.
+A responsive, static landing page for Umesh Educational Institute. It uses plain HTML, CSS, and JavaScript, so it can be hosted directly with GitHub Pages without a build step.
 
 ## Preview locally
 
@@ -19,4 +19,4 @@ Open `index.html` in a browser, or use VS Code's Live Server extension.
 - Open `script.js` and replace `YOUR_EMAIL_ADDRESS` with the email address that should receive inquiries. The contact form uses the visitor's email app (`mailto:`); it does not submit to a server.
 - Review the program descriptions and update the text to match the institute's actual courses and services.
 
-The brand name is styled as **Umesh Educational Institute** (correcting the spelling in the request). The shield-and-open-book logo is in `logo.svg`.
+The brand name is styled as **Umesh Educational Institute**.
