@@ -1,5 +1,5 @@
 const RESPONSE_SHEET_NAME = "Inquiries";
-const RESPONSE_HEADERS = ["Submitted at", "Name", "Email", "Phone", "Message"];
+const RESPONSE_HEADERS = ["Submitted at", "Name", "Email", "Phone", "Program", "Message"];
 
 function doPost(event) {
   try {
@@ -7,6 +7,7 @@ function doPost(event) {
     const name = cleanText(input.name, 100);
     const email = cleanText(input.email, 150);
     const phone = cleanText(input.phone, 30);
+    const program = cleanText(input.program, 150) || "General Inquiry";
     const message = cleanText(input.message, 5000);
 
     if (!name || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -23,6 +24,14 @@ function doPost(event) {
       if (sheet.getLastRow() === 0) {
         sheet.appendRow(RESPONSE_HEADERS);
         sheet.setFrozenRows(1);
+      } else {
+        const existingHeaders = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+        if (!existingHeaders.includes("Program")) {
+          const messageColumn = existingHeaders.indexOf("Message");
+          const insertAt = messageColumn >= 0 ? messageColumn + 1 : existingHeaders.length + 1;
+          sheet.insertColumnBefore(insertAt);
+          sheet.getRange(1, insertAt).setValue("Program");
+        }
       }
 
       sheet.appendRow([
@@ -30,6 +39,7 @@ function doPost(event) {
         protectSpreadsheetCell(name),
         protectSpreadsheetCell(email),
         protectSpreadsheetCell(phone),
+        protectSpreadsheetCell(program),
         protectSpreadsheetCell(message),
       ]);
     } finally {

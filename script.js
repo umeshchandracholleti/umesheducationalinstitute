@@ -23,6 +23,18 @@ siteNav?.querySelectorAll("a").forEach((link) => {
 
 const contactForm = document.querySelector("#contact-form");
 const formNote = document.querySelector("#form-note");
+const programSelect = document.querySelector("#program");
+
+document.querySelectorAll(".pathway-cta[data-program]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const selectedProgram = button.dataset.program;
+    const matchingOption = Array.from(programSelect?.options || []).find(
+      (option) => option.textContent.trim() === selectedProgram,
+    );
+
+    if (matchingOption) programSelect.value = matchingOption.value;
+  });
+});
 
 contactForm?.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -33,12 +45,13 @@ contactForm?.addEventListener("submit", (event) => {
     name: data.get("name")?.toString().trim(),
     email: data.get("email")?.toString().trim(),
     phone: data.get("phone")?.toString().trim() || "",
+    program: data.get("program")?.toString().trim() || "General Inquiry",
     message: data.get("message")?.toString().trim(),
   };
 
   const fallbackToEmail = () => {
     const subject = `Learning inquiry from ${payload.name}`;
-    const body = `Name: ${payload.name}\nEmail: ${payload.email}\nPhone: ${payload.phone || "Not provided"}\n\n${payload.message}`;
+    const body = `Name: ${payload.name}\nEmail: ${payload.email}\nPhone: ${payload.phone || "Not provided"}\nProgram: ${payload.program}\n\n${payload.message}`;
     window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     formNote.textContent = "Your email app is opening with your inquiry ready to send.";
     contactForm.querySelector('button[type="submit"]').disabled = false;

@@ -2,6 +2,8 @@
 
 A responsive static landing page for Umesh Educational Institute. Contact inquiries can be stored in a Google Sheets response sheet through Google Apps Script, or in MySQL through the optional API.
 
+The home page presents three learning pillars—Academic Education, Career & Competitive Preparation, and Career Guidance & Development—with pathways from Classes 1–10 through graduation, exam preparation, job readiness, and skills. Pathway buttons scroll to the inquiry form and select that program automatically.
+
 ## Preview locally
 
 Open `index.html` in a browser, or use VS Code's Live Server extension.
@@ -60,4 +62,8 @@ GitHub Pages only hosts the static website; it cannot run the Node.js API or MyS
 - WhatsApp: `+91 82755368`
 - Email: `umeshcholleti2219@gmail.com`
 
-The contact form collects name, email, optional phone number, and inquiry message. It does not request passwords. With Google Apps Script configured, submissions are written to the private spreadsheet. Otherwise, the site tries the MySQL API and falls back to an email draft if the API is unavailable.
+The contact form collects name, email, optional phone number, program of interest, and inquiry message. It does not request passwords. With Google Apps Script configured, submissions are written to the private spreadsheet; the program is stored in its own column. The MySQL API records the selected program with the inquiry message. If the API is unavailable, the site falls back to an email draft.
+
+## Test responsive layout
+
+Open `index.html` locally and resize the browser to desktop, tablet, and phone widths, or use browser developer tools' responsive-device mode. Check that the three pillars become two columns on tablet and one column on phones, the navigation opens with its menu button, and each pathway CTA selects the matching program in the contact form.

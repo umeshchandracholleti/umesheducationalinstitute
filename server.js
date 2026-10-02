@@ -81,17 +81,18 @@ app.get('/api/health', async (req, res) => {
 });
 
 app.post('/api/users', async (req, res) => {
-  const { name, email, phone, message } = req.body || {};
+  const { name, email, phone, program, message } = req.body || {};
   const cleanName = typeof name === 'string' ? name.trim() : '';
   const cleanEmail = typeof email === 'string' ? email.trim() : '';
   const cleanPhone = typeof phone === 'string' ? phone.trim() : '';
+  const cleanProgram = typeof program === 'string' ? program.trim() : 'General Inquiry';
   const cleanMessage = typeof message === 'string' ? message.trim() : '';
 
   if (!cleanName || !cleanEmail) {
     return res.status(400).json({ success: false, message: 'Name and email are required.' });
   }
 
-  if (cleanName.length > 100 || cleanEmail.length > 150 || cleanPhone.length > 30 || cleanMessage.length > 5000) {
+  if (cleanName.length > 100 || cleanEmail.length > 150 || cleanPhone.length > 30 || cleanProgram.length > 150 || cleanMessage.length > 5000) {
     return res.status(400).json({ success: false, message: 'One or more fields exceed the allowed length.' });
   }
 
@@ -106,7 +107,7 @@ app.post('/api/users', async (req, res) => {
   try {
     const [result] = await pool.execute(
       'INSERT INTO users (name, email, phone, message) VALUES (?, ?, ?, ?)',
-      [cleanName, cleanEmail, cleanPhone, cleanMessage]
+      [cleanName, cleanEmail, cleanPhone, `Selected program: ${cleanProgram}\n\n${cleanMessage}`]
     );
 
     res.status(201).json({
