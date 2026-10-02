@@ -1,6 +1,6 @@
 # Umesh Educational Institute
 
-A responsive static landing page for Umesh Educational Institute, with an optional MySQL-backed API for storing user details.
+A responsive static landing page for Umesh Educational Institute. Contact inquiries can be stored in a Google Sheets response sheet through Google Apps Script, or in MySQL through the optional API.
 
 ## Preview locally
 
@@ -28,6 +28,18 @@ Open `index.html` in a browser, or use VS Code's Live Server extension.
    - `GET /api/health`
    - `POST /api/users`
 
+## Google Sheets response storage
+
+This saves entries from the website form into a private Google spreadsheet in a Google Forms-style response table. It does not create a Google Form.
+
+1. Create a Google Sheet for inquiries and open **Extensions → Apps Script**.
+2. Replace the Apps Script editor contents with `google-apps-script/Code.gs` and save.
+3. Choose **Deploy → New deployment → Web app**. Set **Execute as** to your account and **Who has access** to **Anyone**, then deploy and authorize it. Anyone who obtains this public endpoint can submit rows; do not use it for passwords, payment details, or other sensitive information.
+4. Copy the deployed Web App URL ending in `/exec` into `googleSheetsUrl` in `api-config.js`.
+5. Publish the site. New inquiries will appear in the spreadsheet's `Inquiries` tab.
+
+The spreadsheet itself can remain private. The public Apps Script endpoint accepts only inquiry submissions; it does not expose spreadsheet read access.
+
 ## Example `.env`
 
 ```env
@@ -41,11 +53,11 @@ PORT=3000
 
 ## Connect the GitHub Pages form
 
-GitHub Pages only hosts the static website; it cannot run the Node.js API or MySQL database. Deploy `server.js` to a Node.js host and configure that host's `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, and `PORT` environment variables. Set the deployed API origin in `api-config.js` as `window.UmeshInstituteConfig = { apiBaseUrl: "https://your-api-host.example" };`. Use HTTPS for the API when the site is served over HTTPS. Never place MySQL credentials in frontend files.
+GitHub Pages only hosts the static website; it cannot run the Node.js API or MySQL database. For MySQL, deploy `server.js` to a Node.js host and configure that host's `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, and `PORT` environment variables. Set `apiBaseUrl` in `api-config.js` to the deployed API origin. If `googleSheetsUrl` is configured, the form uses Google Sheets; otherwise it uses the MySQL API. Use HTTPS for deployed APIs. Never place MySQL credentials in frontend files.
 
 ## Contact details
 
 - WhatsApp: `+91 82755368`
 - Email: `umeshcholleti2219@gmail.com`
 
-Contact form submissions are sent to the API and stored in MySQL when the backend is deployed and configured. If the API is unavailable, the form falls back to opening an email draft.
+The contact form collects name, email, optional phone number, and inquiry message. It does not request passwords. With Google Apps Script configured, submissions are written to the private spreadsheet. Otherwise, the site tries the MySQL API and falls back to an email draft if the API is unavailable.

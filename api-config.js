@@ -1,5 +1,6 @@
-// Set this to your deployed API origin before publishing the GitHub Pages site.
-// Example: window.UmeshInstituteConfig = { apiBaseUrl: "https://your-api-host.example" };
+// Set the deployed Google Apps Script Web App URL to save inquiries in Google Sheets.
+// If left empty, the site uses the optional MySQL API instead.
 window.UmeshInstituteConfig = {
+  googleSheetsUrl: "",
   apiBaseUrl: "http://localhost:3000",
 };

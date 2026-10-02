@@ -23,12 +23,14 @@ const dbConfig = {
 };
 
 let pool;
+let databaseError = null;
 
 async function initDatabase() {
+  const candidatePool = mysql.createPool(dbConfig);
   try {
-    pool = mysql.createPool(dbConfig);
-    const connection = await pool.getConnection();
-    await connection.query(`
+    const connection = await candidatePool.getConnection();
+    try {
+      await connection.query(`
       CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
@@ -40,24 +42,41 @@ async function initDatabase() {
         INDEX idx_created_at (created_at)
       )
     `);
-    connection.release();
+    } finally {
+      connection.release();
+    }
+    pool = candidatePool;
+    databaseError = null;
     console.log('MySQL connected and users table is ready.');
   } catch (error) {
-    console.error('Database connection failed. Check the MySQL credentials and ensure the schema has been created.', error.code || '');
+    databaseError = error.code || error.message || String(error);
+    await candidatePool.end().catch(() => {});
+    console.error(
+      `Database connection failed (${databaseError}). Verify DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, and that MySQL is reachable.`
+    );
   }
 }
 
 app.get('/api/health', async (req, res) => {
   if (!pool) {
-    return res.status(503).json({ success: false, message: 'Database not connected yet.' });
+    return res.status(503).json({
+      success: false,
+      message: 'MySQL is unavailable. Check the server configuration and startup logs.',
+      code: databaseError || 'DATABASE_NOT_READY',
+    });
   }
 
   try {
     const [rows] = await pool.query('SELECT 1 AS ok');
     res.json({ success: true, message: 'MySQL is connected.', rows });
   } catch (error) {
-    console.error('Health check failed:', error.code || error.message);
-    res.status(500).json({ success: false, message: 'Unable to check the database connection.' });
+    const code = error.code || error.message || String(error);
+    console.error('Health check failed:', code);
+    res.status(503).json({
+      success: false,
+      message: 'MySQL is unavailable. Check the server configuration and startup logs.',
+      code,
+    });
   }
 });
 

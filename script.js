@@ -1,5 +1,7 @@
 const contactEmail = "umeshcholleti2219@gmail.com";
-const apiBaseUrl = (window.UmeshInstituteConfig && window.UmeshInstituteConfig.apiBaseUrl) || "http://localhost:3000";
+const instituteConfig = window.UmeshInstituteConfig || {};
+const googleSheetsUrl = instituteConfig.googleSheetsUrl || "";
+const apiBaseUrl = instituteConfig.apiBaseUrl || "http://localhost:3000";
 
 const menuButton = document.querySelector(".menu-toggle");
 const siteNav = document.querySelector(".site-nav");
@@ -39,16 +41,35 @@ contactForm?.addEventListener("submit", (event) => {
     const body = `Name: ${payload.name}\nEmail: ${payload.email}\nPhone: ${payload.phone || "Not provided"}\n\n${payload.message}`;
     window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     formNote.textContent = "Your email app is opening with your inquiry ready to send.";
+    contactForm.querySelector('button[type="submit"]').disabled = false;
   };
 
+  const submitButton = contactForm.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
   formNote.textContent = "Sending your inquiry...";
 
-  fetch(`${apiBaseUrl}/api/users`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  })
+  const submission = googleSheetsUrl
+    ? fetch(googleSheetsUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload),
+      })
+    : fetch(`${apiBaseUrl}/api/users`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+  submission
     .then(async (response) => {
+      if (googleSheetsUrl) {
+        formNote.textContent = "Your inquiry was sent to our response sheet. We will contact you soon.";
+        contactForm.reset();
+        submitButton.disabled = false;
+        return;
+      }
+
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok) {
@@ -57,9 +78,10 @@ contactForm?.addEventListener("submit", (event) => {
 
       formNote.textContent = "Your inquiry has been saved successfully. We will contact you soon.";
       contactForm.reset();
+      submitButton.disabled = false;
     })
     .catch((error) => {
-      console.error("Database submit failed, falling back to email:", error);
+      console.error("Inquiry submission failed, falling back to email:", error);
       fallbackToEmail();
     });
 });
