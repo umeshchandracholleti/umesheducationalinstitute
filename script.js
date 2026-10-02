@@ -36,6 +36,112 @@ document.querySelectorAll(".pathway-cta[data-program]").forEach((button) => {
   });
 });
 
+const filmPlayer = document.querySelector(".film-player");
+const filmPlayButton = document.querySelector("#film-play");
+const filmRestartButton = document.querySelector("#film-restart");
+const filmScrubber = document.querySelector("#film-scrubber");
+const filmTime = document.querySelector("#film-time");
+const filmSceneCount = document.querySelector("#film-scene-count");
+const filmSceneTitle = document.querySelector("#film-scene-title");
+const filmSceneCaption = document.querySelector("#film-scene-caption");
+const filmSymbol = document.querySelector("#film-symbol");
+
+if (filmPlayer && filmPlayButton && filmRestartButton && filmScrubber) {
+  const duration = 120;
+  const scenes = [
+    { title: "Every journey begins with a question.", caption: "A curious mind is the beginning of every bright future.", symbol: "?" },
+    { title: "First, we build strong foundations.", caption: "From Classes 1 to 10, small discoveries become lasting confidence.", symbol: "✎" },
+    { title: "Then new doors begin to open.", caption: "Intermediate learning helps students explore interests and prepare for what comes next.", symbol: "↗" },
+    { title: "Knowledge grows into possibility.", caption: "Graduation pathways connect learning, skills, and future plans.", symbol: "▤" },
+    { title: "Big goals deserve a clear plan.", caption: "Focused practice and guidance help aspirants prepare for competitive examinations.", symbol: "◎" },
+    { title: "Practical skills bring confidence.", caption: "Communication, digital, and interview practice support job readiness.", symbol: "✦" },
+    { title: "Your next step can be your own.", caption: "Explore choices, recognize your strengths, and make informed career decisions.", symbol: "✳" },
+    { title: "One learning journey. Every opportunity.", caption: "Umesh Educational Institute — curious minds, confident futures.", symbol: "UEI" },
+  ];
+  let elapsed = 0;
+  let lastFrame = 0;
+  let animationFrame = 0;
+  let playing = false;
+  let activeScene = -1;
+
+  const formatTime = (seconds) => {
+    const wholeSeconds = Math.floor(seconds);
+    return `${String(Math.floor(wholeSeconds / 60)).padStart(2, "0")}:${String(wholeSeconds % 60).padStart(2, "0")}`;
+  };
+
+  const update = () => {
+    const sceneIndex = Math.min(scenes.length - 1, Math.floor(elapsed / (duration / scenes.length)));
+    filmScrubber.value = String(Math.floor(elapsed));
+    filmScrubber.setAttribute("aria-valuetext", `${Math.floor(elapsed)} seconds of 2 minutes`);
+    filmTime.textContent = `${formatTime(elapsed)} / 02:00`;
+    filmPlayer.dataset.scene = String(sceneIndex);
+
+    if (sceneIndex !== activeScene) {
+      const scene = scenes[sceneIndex];
+      activeScene = sceneIndex;
+      filmSceneCount.textContent = `SCENE ${String(sceneIndex + 1).padStart(2, "0")} / ${String(scenes.length).padStart(2, "0")}`;
+      filmSceneTitle.textContent = scene.title;
+      filmSceneCaption.textContent = scene.caption;
+      filmSymbol.textContent = scene.symbol;
+      filmSymbol.setAttribute("aria-label", scene.title);
+    }
+  };
+
+  const stop = () => {
+    playing = false;
+    cancelAnimationFrame(animationFrame);
+    filmPlayButton.innerHTML = "▶ <span>Play story</span>";
+    filmPlayButton.setAttribute("aria-label", "Play story");
+  };
+
+  const tick = (timestamp) => {
+    if (!playing) return;
+    if (lastFrame) elapsed += Math.min((timestamp - lastFrame) / 1000, 0.25);
+    lastFrame = timestamp;
+
+    if (elapsed >= duration) {
+      elapsed = duration;
+      update();
+      stop();
+      return;
+    }
+
+    update();
+    animationFrame = requestAnimationFrame(tick);
+  };
+
+  filmPlayButton.addEventListener("click", () => {
+    if (playing) {
+      stop();
+      return;
+    }
+
+    if (elapsed >= duration) elapsed = 0;
+    playing = true;
+    lastFrame = 0;
+    filmPlayButton.innerHTML = "Ⅱ <span>Pause story</span>";
+    filmPlayButton.setAttribute("aria-label", "Pause story");
+
+    animationFrame = requestAnimationFrame(tick);
+  });
+
+  filmRestartButton.addEventListener("click", () => {
+    stop();
+    elapsed = 0;
+    activeScene = -1;
+    update();
+  });
+
+  filmScrubber.addEventListener("input", () => {
+    elapsed = Number(filmScrubber.value);
+    activeScene = -1;
+    update();
+    if (elapsed >= duration) stop();
+  });
+
+  update();
+}
+
 contactForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   if (!contactForm.reportValidity()) return;

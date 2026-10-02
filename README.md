@@ -4,6 +4,8 @@ A responsive static landing page for Umesh Educational Institute. Contact inquir
 
 The home page presents three learning pillars—Academic Education, Career & Competitive Preparation, and Career Guidance & Development—with pathways from Classes 1–10 through graduation, exam preparation, job readiness, and skills. Pathway buttons scroll to the inquiry form and select that program automatically.
 
+The home page also includes an original two-minute animated story built from the site's HTML, CSS, and JavaScript. It has play/pause, restart, seek, and scene captions; no third-party footage, music, or image assets are embedded. The animation is presented only inside this site, but a public web page cannot technically prevent visitors from recording or copying what their browser displays.
+
 ## Preview locally
 
 Open `index.html` in a browser, or use VS Code's Live Server extension.
@@ -66,4 +68,4 @@ The contact form collects name, email, optional phone number, program of interes
 
 ## Test responsive layout
 
-Open `index.html` locally and resize the browser to desktop, tablet, and phone widths, or use browser developer tools' responsive-device mode. Check that the three pillars become two columns on tablet and one column on phones, the navigation opens with its menu button, and each pathway CTA selects the matching program in the contact form.
+Open `index.html` locally and resize the browser to desktop, tablet, and phone widths, or use browser developer tools' responsive-device mode. Check that the three pillars become two columns on tablet and one column on phones, the navigation opens with its menu button, each pathway CTA selects the matching program in the contact form, and the story controls play, pause, restart, and seek through the 02:00 timeline.

@@ -52,3 +52,68 @@
 @media (max-width: 650px) {
   .site-nav { top: 69px; max-height: calc(100vh - 70px); }
 }
+
+.institute-film { background: #fff; }
+.film-heading { max-width: 760px; margin: 0 auto 34px; text-align: center; }
+.film-heading .section-kicker { justify-content: center; }
+.film-heading h2 { margin: 18px 0 14px; color: var(--navy); font: 800 clamp(36px, 5vw, 56px)/1.08 var(--display); letter-spacing: -2px; }
+.film-heading h2 span { color: #ba8125; }
+.film-heading > p { max-width: 630px; margin: 0 auto; color: #586975; font-size: 15px; line-height: 1.7; }
+.film-player { overflow: hidden; max-width: 960px; margin: 0 auto; border-radius: 20px; background: var(--navy-deep); color: #fff; box-shadow: 0 24px 60px rgba(16, 43, 70, .2); }
+.film-stage { position: relative; display: grid; grid-template-columns: 1fr 1fr; align-items: center; min-height: 390px; overflow: hidden; padding: 48px clamp(28px, 6vw, 76px); isolation: isolate; }
+.film-stage::before, .film-stage::after { position: absolute; z-index: -1; content: ""; border: 1px solid rgba(255,255,255,.1); border-radius: 50%; }
+.film-stage::before { width: 440px; height: 440px; right: -80px; top: -185px; }
+.film-stage::after { width: 300px; height: 300px; right: -10px; top: -115px; }
+.film-art { position: relative; display: grid; place-items: center; min-height: 270px; }
+.film-orbit { position: absolute; width: 220px; height: 220px; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; animation: film-orbit 18s linear infinite; }
+.film-orbit-one::before, .film-orbit-two::before { position: absolute; top: 18px; left: 24px; width: 12px; height: 12px; border-radius: 50%; background: var(--yellow); content: ""; box-shadow: 0 0 24px rgba(247,201,94,.75); }
+.film-orbit-two { width: 165px; height: 165px; border-style: dashed; animation-direction: reverse; animation-duration: 24s; }
+.film-orbit-two::before { top: auto; left: auto; right: 7px; bottom: 30px; width: 9px; height: 9px; background: #f2dfe1; }
+.film-symbol { display: grid; place-items: center; width: 120px; height: 120px; border: 1px solid rgba(255,255,255,.36); border-radius: 32px; background: linear-gradient(145deg, rgba(255,255,255,.19), rgba(255,255,255,.04)); color: #ffe4a0; font: 700 58px/1 var(--display); box-shadow: 0 20px 50px rgba(0,0,0,.22); animation: film-float 4s ease-in-out infinite; }
+.film-path { position: absolute; bottom: 2px; display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.72); font-size: 10px; font-weight: 700; letter-spacing: .5px; }
+.film-path i { width: 22px; height: 1px; background: rgba(247,201,94,.7); }
+.film-copy { position: relative; z-index: 1; max-width: 390px; padding-left: 32px; }
+.film-scene-count { margin: 0 0 14px; color: #f7c95e; font-size: 10px; font-weight: 800; letter-spacing: 1.6px; }
+.film-copy h3 { min-height: 2.5em; margin: 0 0 14px; font: 800 clamp(27px, 3.5vw, 40px)/1.14 var(--display); letter-spacing: -1.2px; }
+.film-copy > p:last-child { margin: 0; color: rgba(255,255,255,.78); font-size: 14px; line-height: 1.7; }
+.film-player[data-scene="1"], .film-player[data-scene="2"], .film-player[data-scene="3"] { --scene-accent: #c9e5ee; }
+.film-player[data-scene="4"], .film-player[data-scene="5"] { --scene-accent: #f7c95e; }
+.film-player[data-scene="6"], .film-player[data-scene="7"] { --scene-accent: #f2dfe1; }
+.film-player[data-scene] .film-symbol { color: var(--scene-accent, #ffe4a0); border-color: color-mix(in srgb, var(--scene-accent, #ffe4a0) 55%, transparent); }
+.film-controls { padding: 20px 28px 18px; background: #081a2b; }
+.film-control-row { display: flex; align-items: center; gap: 18px; }
+.film-play, .film-restart { padding: 9px 12px; border: 1px solid rgba(255,255,255,.24); border-radius: 7px; background: transparent; color: white; cursor: pointer; font-size: 12px; font-weight: 700; transition: background .2s ease, border-color .2s ease; }
+.film-play:hover, .film-restart:hover { border-color: var(--yellow); background: rgba(255,255,255,.08); }
+.film-play:focus-visible, .film-restart:focus-visible, .film-scrubber:focus-visible { outline-color: var(--yellow); }
+.film-time { margin-left: auto; color: rgba(255,255,255,.75); font-variant-numeric: tabular-nums; font-size: 12px; }
+.film-scrubber-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+.film-scrubber { display: block; width: 100%; height: 5px; margin: 17px 0 9px; accent-color: var(--yellow); cursor: pointer; }
+.film-chapters { display: flex; justify-content: space-between; color: rgba(255,255,255,.5); font-size: 10px; }
+.film-legal-note { max-width: 960px; margin: 16px auto 0; color: #69767d; font-size: 11px; line-height: 1.65; }
+.film-cta { display: inline-flex; gap: 12px; align-items: center; margin-top: 17px; color: var(--navy); font-size: 13px; font-weight: 800; }
+.film-cta:hover { color: #a56c16; }
+@keyframes film-orbit { to { transform: rotate(360deg); } }
+@keyframes film-float { 50% { transform: translateY(-8px) rotate(2deg); } }
+@media (max-width: 650px) {
+  .film-heading { text-align: left; }
+  .film-heading .section-kicker { justify-content: flex-start; }
+  .film-heading h2 { font-size: clamp(34px, 10vw, 46px); letter-spacing: -1.4px; }
+  .film-heading > p { font-size: 14px; }
+  .film-player { border-radius: 14px; }
+  .film-stage { grid-template-columns: 1fr; gap: 10px; min-height: 0; padding: 28px 22px 32px; }
+  .film-art { min-height: 205px; }
+  .film-orbit { width: 175px; height: 175px; }
+  .film-orbit-two { width: 130px; height: 130px; }
+  .film-symbol { width: 96px; height: 96px; border-radius: 26px; font-size: 46px; }
+  .film-copy { padding: 0; }
+  .film-copy h3 { min-height: 0; font-size: 29px; }
+  .film-copy > p:last-child { font-size: 13px; }
+  .film-controls { padding: 16px 18px; }
+  .film-control-row { gap: 9px; }
+  .film-play, .film-restart { padding: 9px; font-size: 11px; }
+  .film-time { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .film-orbit, .film-symbol { animation: none; }
+  .film-player *, .film-player *::before, .film-player *::after { scroll-behavior: auto !important; }
+}

@@ -24,6 +24,7 @@
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation"><span></span><span></span></button>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
         <a href="#home">Home</a>
+        <a href="#institute-film">Our Story</a>
         <a href="#about">About Us</a>
         <a href="#academic-education">Academic Education</a>
         <a href="#government-preparation">Government Preparation</a>
@@ -147,6 +148,44 @@
             </div>
           </article>
         </div>
+      </div>
+    </section>
+
+    <section class="institute-film section-pad" id="institute-film" aria-labelledby="film-title">
+      <div class="container">
+        <div class="film-heading">
+          <div class="section-kicker"><span>A TWO-MINUTE LEARNING JOURNEY</span></div>
+          <h2 id="film-title">One journey.<br><span>A world of possibility.</span></h2>
+          <p>An original animated story made for the Umesh Educational Institute website—from first lessons to the next confident step.</p>
+        </div>
+        <div class="film-player" data-scene="0">
+          <div class="film-stage" aria-label="Animated story scene">
+            <div class="film-art" aria-hidden="true">
+              <span class="film-orbit film-orbit-one"></span><span class="film-orbit film-orbit-two"></span>
+              <span class="film-symbol" id="film-symbol">?</span>
+              <div class="film-path" aria-hidden="true"><span>School</span><i></i><span>College</span><i></i><span>Career</span></div>
+            </div>
+            <div class="film-copy" aria-live="polite" aria-atomic="true">
+              <p class="film-scene-count" id="film-scene-count">SCENE 01 / 08</p>
+              <h3 id="film-scene-title">Every journey begins with a question.</h3>
+              <p id="film-scene-caption">A curious mind is the beginning of every bright future.</p>
+            </div>
+          </div>
+          <div class="film-controls">
+            <div class="film-control-row">
+              <button class="film-play" id="film-play" type="button" aria-label="Play story">▶ <span>Play story</span></button>
+              <button class="film-restart" id="film-restart" type="button" aria-label="Restart story">↺ <span>Restart</span></button>
+              <span class="film-time" id="film-time" aria-live="off">00:00 / 02:00</span>
+            </div>
+            <label class="film-scrubber-label" for="film-scrubber">Story timeline</label>
+            <input id="film-scrubber" class="film-scrubber" type="range" min="0" max="120" step="1" value="0" aria-valuetext="0 seconds of 2 minutes">
+            <div class="film-chapters" aria-label="Story chapters">
+              <span>Learn</span><span>Prepare</span><span>Grow</span>
+            </div>
+          </div>
+        </div>
+        <p class="film-legal-note">Original motion graphics and narration text created for this website. No third-party footage, music, or stock imagery is used. The animation plays on this page; screen recording cannot be technically prevented.</p>
+        <a class="film-cta" href="#academic-education">Explore learning pathways <span aria-hidden="true">↗</span></a>
       </div>
     </section>
 
